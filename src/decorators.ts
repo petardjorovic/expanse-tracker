@@ -252,22 +252,43 @@
  ***********CREATING A VALIDATION DECORATOR************
  ******************************************************/
 function required(target: any, propName: string) {
+  let propArr: string[] = [];
+  if (validateObject[target.constructor.name]) {
+    propArr = validateObject[target.constructor.name][propName]
+      ? [...validateObject[target.constructor.name][propName]]
+      : [];
+  }
   validateObject[target.constructor.name] = {
-    [propName]: ["required"],
+    ...validateObject[target.constructor.name],
+    [propName]: [...propArr, "required"],
   };
 }
 
 function minLength(length: number): any {
   return function (target: any, propName: string) {
+    let propArr: string[] = [];
+    if (validateObject[target.constructor.name]) {
+      propArr = validateObject[target.constructor.name][propName]
+        ? [...validateObject[target.constructor.name][propName]]
+        : [];
+    }
     validateObject[target.constructor.name] = {
-      [propName]: ["minLength"],
+      ...validateObject[target.constructor.name],
+      [propName]: [...propArr, "minLength"],
     };
   };
 }
 
 function positiveNumber(target: any, propName: string) {
+  let propArr: string[] = [];
+  if (validateObject[target.constructor.name]) {
+    propArr = validateObject[target.constructor.name][propName]
+      ? [...validateObject[target.constructor.name][propName]]
+      : [];
+  }
   validateObject[target.constructor.name] = {
-    [propName]: ["positiveNumber"],
+    ...validateObject[target.constructor.name],
+    [propName]: [...propArr, "positiveNumber"],
   };
 }
 
@@ -279,14 +300,38 @@ interface IValidator {
 
 const validateObject: IValidator = {};
 
-function validate(obj: object): boolean {
-  return true;
+function validate(obj: any): boolean {
+  //console.log(validateObject);
+  const validateClass = validateObject[obj.constructor.name];
+  if (!validateClass) return true;
+
+  let isValid: boolean = true;
+
+  for (let prop in validateClass) {
+    for (let elem of validateClass[prop]) {
+      switch (elem) {
+        case "required":
+          isValid = isValid && !!obj[prop];
+          break;
+        case "minLength":
+          isValid = isValid && obj[prop].length >= 3;
+          break;
+        case "positiveNumber":
+          isValid = isValid && +obj[prop] > 0;
+          break;
+      }
+    }
+  }
+
+  return isValid;
 }
 
 class User {
   @required
   @minLength(3)
   username: string;
+
+  @positiveNumber
   age: number;
 
   constructor(uname: string, age: number) {
@@ -296,9 +341,9 @@ class User {
 }
 
 const u1 = new User("Jonh", 25);
-const u2 = new User("", -30);
+const u2 = new User("Mer", 10);
 
-if (!validate(u1)) {
+if (!validate(u2)) {
   alert("Invalid input");
 } else {
   console.log("User created successfully");

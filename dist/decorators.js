@@ -211,25 +211,57 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
  ***********CREATING A VALIDATION DECORATOR************
  ******************************************************/
 function required(target, propName) {
-    validateObject[target.constructor.name] = {
-        [propName]: ["required"],
-    };
+    let propArr = [];
+    if (validateObject[target.constructor.name]) {
+        propArr = validateObject[target.constructor.name][propName]
+            ? [...validateObject[target.constructor.name][propName]]
+            : [];
+    }
+    validateObject[target.constructor.name] = Object.assign(Object.assign({}, validateObject[target.constructor.name]), { [propName]: [...propArr, "required"] });
 }
 function minLength(length) {
     return function (target, propName) {
-        validateObject[target.constructor.name] = {
-            [propName]: ["minLength"],
-        };
+        let propArr = [];
+        if (validateObject[target.constructor.name]) {
+            propArr = validateObject[target.constructor.name][propName]
+                ? [...validateObject[target.constructor.name][propName]]
+                : [];
+        }
+        validateObject[target.constructor.name] = Object.assign(Object.assign({}, validateObject[target.constructor.name]), { [propName]: [...propArr, "minLength"] });
     };
 }
 function positiveNumber(target, propName) {
-    validateObject[target.constructor.name] = {
-        [propName]: ["positiveNumber"],
-    };
+    let propArr = [];
+    if (validateObject[target.constructor.name]) {
+        propArr = validateObject[target.constructor.name][propName]
+            ? [...validateObject[target.constructor.name][propName]]
+            : [];
+    }
+    validateObject[target.constructor.name] = Object.assign(Object.assign({}, validateObject[target.constructor.name]), { [propName]: [...propArr, "positiveNumber"] });
 }
 const validateObject = {};
 function validate(obj) {
-    return true;
+    //console.log(validateObject);
+    const validateClass = validateObject[obj.constructor.name];
+    if (!validateClass)
+        return true;
+    let isValid = true;
+    for (let prop in validateClass) {
+        for (let elem of validateClass[prop]) {
+            switch (elem) {
+                case "required":
+                    isValid = isValid && !!obj[prop];
+                    break;
+                case "minLength":
+                    isValid = isValid && obj[prop].length >= 3;
+                    break;
+                case "positiveNumber":
+                    isValid = isValid && +obj[prop] > 0;
+                    break;
+            }
+        }
+    }
+    return isValid;
 }
 class User {
     constructor(uname, age) {
@@ -241,9 +273,12 @@ __decorate([
     required,
     minLength(3)
 ], User.prototype, "username", void 0);
+__decorate([
+    positiveNumber
+], User.prototype, "age", void 0);
 const u1 = new User("Jonh", 25);
-const u2 = new User("", -30);
-if (!validate(u1)) {
+const u2 = new User("Mer", 10);
+if (!validate(u2)) {
     alert("Invalid input");
 }
 else {
