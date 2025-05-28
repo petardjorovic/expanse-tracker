@@ -390,13 +390,319 @@
 // function return type never se koristi kad neka funkcija ne vraca nista
 // nego baca gresku, throw new Error ili neki CustomError object
 
-function greet(username: string): void {
-  console.log(`Hello ${username}`);
+// function greet(username: string): void {
+//   console.log(`Hello ${username}`);
+// }
+
+// function errorMsg(errMsg: string, errCode: number): never {
+//   throw { message: errMsg, code: errCode };
+// }
+
+// console.log(greet("Petar"));
+// console.log(errorMsg("Internal server error", 500));
+
+/*****************************************************
+ ********** LECTURE 39; ACCESS MODIFIERS *************
+ *****************************************************/
+
+// po default ispred svakog property i method stoji public
+
+// class Employee {
+//   constructor(
+//     public empName: string,
+//     private salary: number,
+//     public baseLocation: string,
+//     public isEligible: boolean,
+//     private hikePercent: number,
+//     public readonly empId: number
+//   ) {}
+
+//   getSalary() {
+//     if (this.isEligible) {
+//       return this.getNewSalary();
+//     }
+//     return this.salary;
+//   }
+
+//   private getNewSalary() {
+//     return this.salary + (this.salary * this.hikePercent) / 100;
+//   }
+// }
+
+// const employee1 = new Employee("Petar Djorovic", 50000, "KM", true, 10, 101);
+// const employee2 = new Employee("Danica Jevremovic", 80000, "BG", true, 15, 102);
+// console.log(employee1);
+// console.log(employee2);
+// console.log(employee1.getSalary());
+
+/********************************************************************************
+ ************ LECTURE 43; METHOD OVERRIDING & PROTECTED MODIFIER ****************
+ ********************************************************************************/
+
+// class Person {
+//   name: string;
+//   protected dob: string;
+//   gender: string;
+
+//   constructor(n: string, dob: string, gen: string) {
+//     this.name = n;
+//     this.dob = dob;
+//     this.gender = gen;
+//   }
+
+//   calculateAge() {
+//     console.log("Calculate age method called from within Person class");
+//     return new Date().getFullYear() - new Date(this.dob).getFullYear();
+//   }
+// }
+
+// let p1 = new Person("Petar", "10-24-1989", "male");
+
+// class Employee extends Person {
+//   salary: number;
+//   bonus: number;
+
+//   constructor(n: string, dob: string, gen: string, sal: number, bon: number) {
+//     super(n, dob, gen);
+//     this.salary = sal;
+//     this.bonus = bon;
+//   }
+
+//   getSalary() {
+//     return this.salary + this.bonus;
+//   }
+//   calculateAge(): number {
+//     console.log("Calculate age method called from within Employee class");
+//     return 2025 - new Date(this.dob).getFullYear();
+//   }
+// }
+
+// let emp1 = new Employee("Milos", "1-1-1990", "male", 120000, 15000);
+
+// console.log(emp1.calculateAge());
+//console.log(emp1.getSalary());
+
+/*****************************************************************
+ ************ LECTURE 44; GETTER & SETTER METHODS ****************
+ *****************************************************************/
+
+// class Person {
+//   name: string;
+//   private _age: number | null = null;
+
+//   constructor(n: string) {
+//     this.name = n;
+//   }
+
+//   get age() {
+//     if (this._age !== null) {
+//       return this._age;
+//     } else {
+//       throw new Error("You have not set value for age yet");
+//     }
+//   }
+
+//   set age(value: number) {
+//     if (value > 0) {
+//       this._age = value;
+//     } else {
+//       throw new Error("Age must be greater than 0");
+//     }
+//   }
+// }
+
+// const p = new Person("Petar");
+// p.age = 1;
+// console.log(p.age);
+
+// class Circle {
+//   private _radius: number | null = null;
+
+//   get radius() {
+//     if (this._radius !== null) {
+//       return this._radius;
+//     } else {
+//       throw new Error("You have not set value radius yet");
+//     }
+//   }
+
+//   set radius(r: number) {
+//     this._radius = r;
+//   }
+
+//   //? ove diameter se zovu computed properties, jer ih dobijamao na osnovu this._radius property
+//   get diameter() {
+//     if (this._radius !== null) {
+//       return this._radius * 2;
+//     } else {
+//       throw new Error("You have to set value for radius first");
+//     }
+//   }
+
+//   set diameter(value: number) {
+//     this._radius = value / 2;
+//   }
+// }
+
+// const c = new Circle();
+// c.diameter = 10;
+// console.log(c.radius);
+// console.log(c.diameter);
+
+/*****************************************************************
+ ************ LECTURE 45; STATIC METHODS & PROPERTIES ************
+ *****************************************************************/
+
+// class Employee {
+//   public firstName: string;
+//   public lastName: string;
+//   public static count: number = 0;
+
+//   constructor(fname: string, lname: string) {
+//     this.firstName = fname;
+//     this.lastName = lname;
+//     Employee.count++;
+//   }
+
+//   getFullName() {
+//     return this.firstName + " " + this.lastName;
+//   }
+
+//   static sayHello() {
+//     console.log("Hello");
+//   }
+// }
+
+// const e1 = new Employee("Petar", "Djorovic");
+// const e2 = new Employee("Petar", "Djorovic");
+// Employee.sayHello();
+// console.log(e1.getFullName());
+
+/*****************************************************************
+ ******************** LECTURE 46; ABSTRACT CLASS *****************
+ *****************************************************************/
+
+// abstract class Employee {
+//   firstName: string;
+//   lastName: string;
+
+//   abstract getSalary(): number;
+
+//   constructor(fn: string, ln: string) {
+//     this.firstName = fn;
+//     this.lastName = ln;
+//   }
+// }
+
+// class PermanentEmployee extends Employee {
+//   salary: number;
+
+//   constructor(fn: string, ln: string, sal: number) {
+//     super(fn, ln);
+//     this.salary = sal;
+//   }
+
+//   getSalary(): number {
+//     return this.salary * 12;
+//   }
+// }
+
+// class ContractEmployee extends Employee {
+//   hourlySalary: number;
+
+//   constructor(fn: string, ln: string, sal: number) {
+//     super(fn, ln);
+//     this.hourlySalary = sal;
+//   }
+
+//   getSalary(): number {
+//     return this.hourlySalary * 8 * 365;
+//   }
+// }
+
+// const perEmp = new PermanentEmployee("Petar", "Djorovic", 1000);
+// const conEmp = new ContractEmployee("Milos", "Markovic", 20);
+// console.log(perEmp.getSalary());
+// console.log(conEmp.getSalary());
+
+/*****************************************************************
+ ****** LECTURE 47; PRIVATE CONTRUCTOR & SINGLETON PATTERN *******
+ *****************************************************************/
+
+// class Person {
+//   private static _instance: Person;
+//   private constructor() {}
+
+//   static getInstance() {
+//     console.log(Person._instance);
+
+//     if (Person._instance) {
+//       return Person._instance;
+//     }
+//     Person._instance = new Person();
+//     return Person._instance;
+//   }
+// }
+
+// const p = Person.getInstance();
+// const p2 = Person.getInstance();
+
+// console.log(p === p2);
+
+/**************************************************************************
+ *********************** LECTURE 48; INTERFACES  **************************
+ **************************************************************************/
+
+interface User {
+  firstName: string;
+  lastName: string;
+
+  greetUser(): void;
+
+  getFullName(): string;
 }
 
-function errorMsg(errMsg: string, errCode: number): never {
-  throw { message: errMsg, code: errCode };
+class Admin implements User {
+  public firstName: string;
+  public lastName: string;
+
+  constructor(fn: string, ln: string) {
+    this.firstName = fn;
+    this.lastName = ln;
+  }
+
+  greetUser() {
+    console.log("Hello Admin: " + this.getFullName());
+  }
+
+  getFullName(): string {
+    return this.firstName + " " + this.lastName;
+  }
 }
 
-console.log(greet("Petar"));
-console.log(errorMsg("Internal server error", 500));
+class Member implements User {
+  firstName: string;
+  lastName: string;
+
+  constructor(fn: string, ln: string) {
+    this.firstName = fn;
+    this.lastName = ln;
+  }
+  greetUser() {
+    console.log("Hello Member: " + this.getFullName());
+  }
+
+  getFullName(): string {
+    return this.firstName + " " + this.lastName;
+  }
+}
+
+function sayHello(usr: User) {
+  console.log("Hello ", usr.firstName, usr.lastName);
+}
+
+const admin = new Admin("Petar", "Djorovic");
+const member = new Member("Milos", "Novakovic");
+
+sayHello(admin);
+sayHello(member);
