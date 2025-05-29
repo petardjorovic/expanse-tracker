@@ -2,34 +2,13 @@
 /*************************************
  * LECTURE 3; VARIABLES IN TYPESCRIPT
  **************************************/
-class Admin {
-    constructor(fn, ln) {
-        this.firstName = fn;
-        this.lastName = ln;
-    }
-    greetUser() {
-        console.log("Hello Admin: " + this.getFullName());
-    }
-    getFullName() {
-        return this.firstName + " " + this.lastName;
+function calcArea(shape) {
+    switch (shape.kind) {
+        case "circle":
+            return shape.radius * 3.14 * shape.radius;
+        case "square":
+            return shape.length * shape.length;
     }
 }
-class Member {
-    constructor(fn, ln) {
-        this.firstName = fn;
-        this.lastName = ln;
-    }
-    greetUser() {
-        console.log("Hello Member: " + this.getFullName());
-    }
-    getFullName() {
-        return this.firstName + " " + this.lastName;
-    }
-}
-function sayHello(usr) {
-    console.log("Hello ", usr.firstName, usr.lastName);
-}
-const admin = new Admin("Petar", "Djorovic");
-const member = new Member("Milos", "Novakovic");
-sayHello(admin);
-sayHello(member);
+console.log(calcArea({ kind: "square", length: 12 }));
+console.log(calcArea({ kind: "circle", radius: 9 }));
