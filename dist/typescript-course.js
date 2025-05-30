@@ -2,13 +2,24 @@
 /*************************************
  * LECTURE 3; VARIABLES IN TYPESCRIPT
  **************************************/
-function calcArea(shape) {
-    switch (shape.kind) {
-        case "circle":
-            return shape.radius * 3.14 * shape.radius;
-        case "square":
-            return shape.length * shape.length;
-    }
+function updateUserSettings(partialSettings) {
+    console.log("Updating:", partialSettings);
 }
-console.log(calcArea({ kind: "square", length: 12 }));
-console.log(calcArea({ kind: "circle", radius: 9 }));
+const user = {
+    username: "Pero",
+    email: "perodjorovic@gmail.com",
+    darkMode: true,
+    language: "en",
+};
+//user.darkMode = false; //* ovo ne moze zbog Readonly<> generic-a
+const newSettings = {
+    darkMode: true,
+    language: "en",
+};
+updateUserSettings(newSettings);
+let names = ["milos", "petar", "milica", "ivana"];
+//names.push("janko"); //* ovo ne moze zbog Readonly generic-a
+console.log(names);
+let m = {
+    email: "example@email.com",
+};

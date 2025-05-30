@@ -982,27 +982,341 @@
  ******************* LECTURE 54; DISCRIMINATED UNION  *********************
  **************************************************************************/
 
-interface Circle {
-  kind: "circle"; //* ovaj 'circle' nije vrednost nego literal type
-  radius: number;
+// interface Circle {
+//   kind: "circle"; //* ovaj 'circle' nije vrednost nego literal type
+//   radius: number;
+// }
+
+// interface Square {
+//   kind: "square"; //* ovaj 'sqaure' nije vrednost nego literal type
+//   length: number;
+// }
+
+// //* ovo se onda zove dicriminated union
+// type Shape = Circle | Square;
+
+// function calcArea(shape: Shape) {
+//   switch (shape.kind) {
+//     case "circle":
+//       return shape.radius * 3.14 * shape.radius;
+//     case "square":
+//       return shape.length * shape.length;
+//   }
+// }
+
+// console.log(calcArea({ kind: "square", length: 12 }));
+// console.log(calcArea({ kind: "circle", radius: 9 }));
+
+/**************************************************************************
+ **************** LECTURE 55; TYPE CASTING IN TYPESCRIPT  *****************
+ **************************************************************************/
+// //* kad selektujes po html elementu onda ts zna za type elementa
+// // const form = document.querySelector('form');
+
+// //* postoje dva nacina za type casting
+// //* 1. nacin, ali ne moze ovako recimo u REACT-u
+// const inputDesc = <HTMLInputElement>document.querySelector("#desc")!;
+
+// //* 2. nacin, moze u REACTU
+// const inputAmount = document.querySelector("#amount")! as HTMLInputElement;
+
+// //* ako nisi siguran da li je element mozda null, onda bez znaka uzvika !
+// const input = document.querySelector("#amount");
+
+// //* onda pomocu if radis type guarding
+// if (input) {
+//   (input as HTMLInputElement).value = "2500";
+// }
+
+/**************************************************************************
+ ************** LECTURE 56; INDEX PROPERTIES IN TYPESCRIPT  ***************
+ **************************************************************************/
+
+// interface Product {
+//   id: number;
+//   name: string;
+//   [prop: string]: string | number;
+// }
+
+// let prod1: Product = {
+//   id: 10,
+//   name: "Chair",
+//   material: "wood",
+//   prodNo: 101,
+// };
+
+// let prod2: Product = {
+//   id: 20,
+//   name: "Desk",
+//   design: "Round-desk",
+//   numSeats: 4,
+// };
+
+// interface Settings {
+//   [props: string]: string | number | boolean;
+// }
+
+// let display: Settings = {
+//   darkMode: true,
+//   colorTheme: "pink",
+//   width: 1000,
+// };
+
+// interface User {
+//   name: string;
+//   [props: string]: any;
+// }
+
+// const users: User[] = [
+//   { name: "Petar", age: 10, friends: ["Nenad", "Janko"] },
+//   {
+//     name: "Milos",
+//     interests: ["Sport", "Science"],
+//     address: { city: "BG", street: "Kneza Milosa 6" },
+//   },
+// ];
+
+/**************************************************************************
+ ************ LECTURE 57; FUNCTION OVERLOADING IN TYPESCRIPT  *************
+ **************************************************************************/
+
+// type StringOrNumber = string | number;
+
+// function addition(a: string, b: string): string;
+// function addition(a: number, b: number): number;
+// function addition(a: string, b: number): string;
+// function addition(a: number, b: string): string;
+// function addition(a: StringOrNumber, b: StringOrNumber) {
+//   if (typeof a === "string" || typeof b === "string") {
+//     return a.toString() + b.toString();
+//   }
+//   return a + b;
+// }
+
+// console.log(addition(10, "spl").split(","));
+
+/**************************************************************************
+ ************ LECTURE 58; GENERICS IN TYPESCRIPT  *************
+ **************************************************************************/
+
+// function swap<T>(arr: T[], index1: number, index2: number): T[] {
+//   // swapping logic
+// }
+
+// let str = ["Hello", "Hi", "How are you"];
+// let num = [10, 20, 30];
+// let numOrStr = [10, 20, "sdsd"];
+
+// //* built in generics are Array, Promise, Object
+
+// const numbers: Array<number> = [1, 5, 9, 10];
+
+// const prom: Promise<number> = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve(100);
+//   }, 1000);
+// });
+
+/**************************************************************************
+ ********* LECTURE 59; CREATING GENERIC FUNCTION IN TYPESCRIPT  ***********
+ **************************************************************************/
+
+// function swap<T>(arr: T[], index1: number, index2: number): T[] {
+//   if (
+//     index1 < 0 ||
+//     index1 >= arr.length ||
+//     index2 < 0 ||
+//     index2 >= arr.length
+//   ) {
+//     throw new Error("Invalid index");
+//   }
+//   [arr[index1], arr[index2]] = [arr[index2], arr[index1]];
+//   return arr;
+// }
+
+// let str = ["Hello", "Hi", "How are you"];
+// let num = [10, 20, 30];
+// let numOrStr = [10, 20, "sdsd"];
+
+// let p = swap(str, 0, 2);
+// let p1 = swap(num, 0, 2);
+// let p2 = swap(numOrStr, 0, 2);
+// console.log(swap(str, 0, 2));
+// console.log(swap(num, 0, 2));
+// console.log(swap(numOrStr, 0, 2));
+
+// //* built in generics are Array, Promise, Object
+
+// const numbers: Array<number> = [1, 5, 9, 10];
+
+// const prom: Promise<number> = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve(100);
+//   }, 1000);
+// });
+
+// function mergeObj(obj1: object, obj2: object) {
+//   return Object.assign(obj1, obj2);
+// }
+
+// let combined = mergeObj(
+//   { name: "petar", age: 36 },
+//   { name: "petar", occupation: "dev" }
+// );
+// console.log(combined);
+
+/**************************************************************************
+ ********** LECTURE 60; WORKING WITH CONSTRAINTS IN TYPESCRIPT ************
+ **************************************************************************/
+
+// function mergeObj<T extends object, U extends object>(obj1: T, obj2: U): T & U {
+//   return Object.assign(obj1, obj2);
+// }
+
+// let combined = mergeObj(
+//   { name: "petar", age: 36 },
+//   { name: "petar", occupation: "dev" }
+// );
+// console.log(combined);
+// console.log(combined.name);
+
+/**************************************************************************
+ ************* LECTURE 61; KEYOF CONSTRAINTS IN TYPESCRIPT ***************
+ **************************************************************************/
+
+// function getPropValue<T extends object, U extends keyof T>(obj: T, key: U) {
+//   return obj[key];
+// }
+
+// console.log(getPropValue({ name: "Petar", age: 32 }, "name"));
+
+/**************************************************************************
+ *************** LECTURE 62; GENERIC CLASS IN TYPESCRIPT ******************
+ **************************************************************************/
+
+// type Book = {
+//   name: string;
+//   pages: number;
+//   price: number;
+// };
+
+// type Cloth = {
+//   name: string;
+//   size: string;
+//   price: number;
+// };
+
+// class ShoppingCart<T> {
+//   private items: T[] = [];
+
+//   addItem(item: T) {
+//     this.items.push(item);
+//   }
+
+//   getItems() {
+//     return this.items;
+//   }
+// }
+
+// const bookCart = new ShoppingCart<Book>();
+// const clothCart = new ShoppingCart<Cloth>();
+// bookCart.addItem({ name: "A book", pages: 320, price: 18 });
+// bookCart.addItem({ name: "B book", pages: 225, price: 15 });
+// console.log(bookCart.getItems());
+// clothCart.addItem({ name: "t-shirt", size: "xl", price: 20 });
+// console.log(clothCart.getItems());
+
+/**************************************************************************
+ *************** LECTURE 63; GENERIC TYPE VS UNION TYPE *******************
+ **************************************************************************/
+
+// type Book = {
+//   name: string;
+//   pages: number;
+//   price: number;
+// };
+
+// type Cloth = {
+//   name: string;
+//   size: string;
+//   price: number;
+// };
+
+// //* ovo nece da radi jel ti treba ili only string[] ili only number[]
+// /*class ShoppingCart {
+//   private items: string[] | number[] = [];
+
+//   //* a ts ovde ne zna da li string ili number
+//   addItem(item: string | number) {
+//     this.items.push(item);
+//   }
+
+//   getItems() {
+//     return this.items;
+//   }
+// }*/
+
+// //* zato koristimo generics
+// class ShoppingCart<T> {
+//   private items: T[] = [];
+
+//   addItem(item: T) {
+//     this.items.push(item);
+//   }
+
+//   getItems() {
+//     return this.items;
+//   }
+// }
+
+// const strCart = new ShoppingCart<string>();
+// const numCart = new ShoppingCart<number>();
+// strCart.addItem("book");
+// numCart.addItem(100);
+// console.log(strCart.getItems());
+// console.log(numCart.getItems());
+
+/**************************************************************************
+ ************ LECTURE 64; PARTIAL & READONLY & PICK GENERICS **************
+ **************************************************************************/
+
+interface UserSettings {
+  username: string;
+  email: string;
+  darkMode: boolean;
+  language: string;
 }
 
-interface Square {
-  kind: "square"; //* ovaj 'sqaure' nije vrednost nego literal type
-  length: number;
+function updateUserSettings(partialSettings: Partial<UserSettings>) {
+  console.log("Updating:", partialSettings);
 }
 
-//* ovo se onda zove dicriminated union
-type Shape = Circle | Square;
+const user: Readonly<UserSettings> = {
+  username: "Pero",
+  email: "perodjorovic@gmail.com",
+  darkMode: true,
+  language: "en",
+};
 
-function calcArea(shape: Shape) {
-  switch (shape.kind) {
-    case "circle":
-      return shape.radius * 3.14 * shape.radius;
-    case "square":
-      return shape.length * shape.length;
-  }
+//user.darkMode = false; //* ovo ne moze zbog Readonly<> generic-a
+
+const newSettings = {
+  darkMode: true,
+  language: "en",
+};
+
+updateUserSettings(newSettings);
+
+let names: Readonly<string[]> = ["milos", "petar", "milica", "ivana"];
+//names.push("janko"); //* ovo ne moze zbog Readonly generic-a
+console.log(names);
+
+interface Member {
+  username: string;
+  email: string;
+  age: number;
 }
 
-console.log(calcArea({ kind: "square", length: 12 }));
-console.log(calcArea({ kind: "circle", radius: 9 }));
+let m: Pick<Member, "email"> = {
+  email: "example@email.com",
+};
