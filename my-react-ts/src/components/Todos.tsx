@@ -2,21 +2,10 @@ import { useContext } from "react";
 import { TodoItem } from "./TodoItem";
 import { TodosContext } from "../store/todos-context";
 
-const Todos: React.FC = () => {
+const Todos = () => {
   const todosCntx = useContext(TodosContext);
   return (
-    <ul
-      style={{
-        margin: "0",
-        padding: "0",
-        listStyle: "none",
-        marginTop: "20px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        alignItems: "center",
-      }}
-    >
+    <ul className="m-0 p-0 list-none mt-5 flex flex-col gap-2 items-center">
       {todosCntx.todos.map((t) => {
         return (
           <TodoItem

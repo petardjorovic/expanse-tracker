@@ -1,61 +1,37 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { TodosContext } from "../store/todos-context";
 
-const NewTodo: React.FC = () => {
+const NewTodo = () => {
   const todosCntx = useContext(TodosContext);
-  const textRef = useRef<HTMLInputElement>(null);
+  //const textRef = useRef<HTMLInputElement>(null);
+  const [inputText, setInputText] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const enteredText = textRef.current!.value;
+    //const enteredText = textRef.current!.value;
+    const enteredText = inputText;
     if (enteredText.trim().length === 0) {
       return;
     }
 
     todosCntx.addTodo(enteredText);
+    setInputText("");
   };
   return (
-    <form
-      style={{
-        display: "flex",
-        flexDirection: "column",
-      }}
-      onSubmit={handleSubmit}
-    >
-      <label
-        htmlFor="todo"
-        style={{ fontSize: "14px", fontWeight: "600", marginBottom: "3px" }}
-      >
+    <form className="flex flex-col" onSubmit={handleSubmit}>
+      <label htmlFor="todo" className="text-sm font-semibold mt-1">
         Todo text
       </label>
       <input
         type="text"
         id="todo"
-        ref={textRef}
-        style={{
-          outline: "none",
-          padding: "8px 10px 4px 10px",
-          border: "none",
-          borderBottom: "2px solid #1b1d24",
-          backgroundColor: "#e1e4ed",
-          borderTopLeftRadius: "4px",
-          borderTopRightRadius: "4px",
-          fontSize: "16px",
-        }}
+        //ref={textRef}
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+        className="pt-2 pl-[10px] pr-[10px] pb-1 border-b-2 border-b-slate-800 bg-slate-300 rounded-t text-base outline-none"
       />
-      <button
-        style={{
-          marginTop: "5px",
-          cursor: "pointer",
-          padding: "5px 10px",
-          backgroundColor: "#d9b70d",
-          borderRadius: "3px",
-          border: "none",
-          outline: "none",
-          maxWidth: "90px",
-        }}
-      >
+      <button className="mt-1 cursor-pointer py-1 px-2 bg-yellow-600 rounded-[3px] outline-none max-w-[100px]">
         Add todo
       </button>
     </form>

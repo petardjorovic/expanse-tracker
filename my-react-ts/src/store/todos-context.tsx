@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Todo from "../models/Todo";
 
 type TodosCntx = {
@@ -13,9 +13,7 @@ export const TodosContext = React.createContext<TodosCntx>({
   deleteTodo: (id: string) => {},
 });
 
-const TodosContextProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const TodosContextProvider = ({ children }: { children: ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   const addTodoHandler = (text: string) => {

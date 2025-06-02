@@ -1,27 +1,13 @@
-export const TodoItem: React.FC<{
+type TodoProps = {
   text: string;
   onDeleteTodo: () => void;
-}> = ({ text, onDeleteTodo }) => {
+};
+
+export const TodoItem = ({ text, onDeleteTodo }: TodoProps) => {
   return (
-    <li
-      style={{
-        boxSizing: "border-box",
-        display: "flex",
-        padding: "5px 10px",
-        margin: "0",
-        backgroundColor: "#e1e4ed",
-        borderRadius: "4px",
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "space-between",
-        fontSize: "14px",
-      }}
-    >
+    <li className="box-border flex items-center justify-between text-sm w-full rounded bg-slate-300 m-0 px-[10px] py-[5px]">
       <span>{text}</span>
-      <span
-        onClick={onDeleteTodo}
-        style={{ fontSize: "12px", cursor: "pointer" }}
-      >
+      <span onClick={onDeleteTodo} className="text-xs cursor-pointer">
         ❌
       </span>
     </li>
